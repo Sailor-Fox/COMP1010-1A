@@ -355,9 +355,25 @@ public class ArrayService {
 	 * @return the longest ascending sequence in the array
 	 * in case of tie, return the first of the tied sequences
 	 * return null if array is null
-	 * return empty arsray if array is empty
+	 * return empty array if array is empty
 	 */
 	public static int[] longestAscendingSequence(int[] data) {
-		return new int[0];
+		if (data == null) {
+			return null; 
+		} else if (data.length == 0) {
+			return new int[0];
+		} else {
+			int length = longestAscendingSequenceLength(data);
+			int start = longestAscendingSequenceStart(data);
+			int[] arr = new int[length];
+			for (int i = 0; i < length; i++) {
+				arr[i] = data[i + start];
+			}
+			for (int i = 0; i < arr.length; i++) {
+				System.out.println(arr[i]);
+			}
+			System.out.println("end of array");
+			return arr;
+		}
 	}
 }
