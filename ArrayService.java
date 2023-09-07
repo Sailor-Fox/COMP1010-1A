@@ -285,8 +285,8 @@ public class ArrayService {
 	}
 
 	public static int longestAscendingSequenceLength(int[] data, int max, int start) {
-		if (start >= data.length - max) {
-			return max;
+		if (start >= data.length) {
+			return max+5;
 		} else {
 			for (int i = start; i < data.length-1; i++) {
 				if (data[i] < data[i+1]) {
@@ -294,7 +294,7 @@ public class ArrayService {
 					return longestAscendingSequenceLength(data, max, i+1);
 				} else {
 					// that pair of items was ascending so increment max by one
-					max++;
+					max = max+1;
 				}
 			}
 			// if it reaches here then the ascending sequence goes to the end of the array
@@ -323,6 +323,5 @@ public class ArrayService {
 	 */
 	public static int[] longestAscendingSequence(int[] data) {
 		return new int[0];
-		// testing
 	}
 }
