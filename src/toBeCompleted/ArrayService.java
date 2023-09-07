@@ -316,7 +316,37 @@ public class ArrayService {
 	 * return -1 if array is null or empty.
 	 */
 	public static int longestAscendingSequenceStart(int[] data) {
-		return -1;
+		if (data == null || data.length == 0) {
+			return -1;
+		} else {
+			// call the recursive function
+			return longestAscendingSequenceStart(data, 0, 1, 0, 0);
+		}
+	}
+	/* 
+	 * data: the input array
+	 * start: the beginning of sequence we are checking if ascending
+	 * compare: the current item to check if larger than the prior
+	 * max: the largest ascending sequence length so far
+	 * maxId: where the longest ascending sequence begins
+	*/ 
+	public static int longestAscendingSequenceStart(int[] data, int start, int compare, int max, int maxId) {
+		if (start >= data.length) {
+			// once reach end of data array then return where the longest ascending sequence begins
+			return maxId;
+		}
+		if (compare >= data.length || data[compare] < data[compare - 1]) {
+			// the sequence is no longer ascending so move onto the next possibility
+			int potentialMax = compare - start; // the length of the ascending sequence we just found
+			if (potentialMax > max) {
+				return longestAscendingSequenceStart(data, compare, compare+1, compare-start, start);
+			} else {
+				return longestAscendingSequenceStart(data, compare, compare+1, max, maxId);
+			}
+		} else {
+			// the sequence is (so far) ascending so continue checking if its longer
+			return longestAscendingSequenceStart(data, start, compare + 1, max, maxId);
+		}
 	}
 	
 	/**
