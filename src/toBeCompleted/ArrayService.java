@@ -279,26 +279,32 @@ public class ArrayService {
 		if (data == null || data.length == 0) {
 			return 0;
 		} else {
-			// call the recursive version
-			return longestAscendingSequenceLength(data, 0, 0);
+			// call the recursive function
+			return longestAscendingSequenceLength(data, 0, 1, 0);
 		}
 	}
-
-	public static int longestAscendingSequenceLength(int[] data, int max, int start) {
-		if (start >= data.length - max) {
+	/* 
+	 * data: the input array
+	 * start: the beginning of sequence we are checking if ascending
+	 * compare: the current item to check if larger than the prior
+	 * max: the largest ascending sequence length so far
+	*/ 
+	public static int longestAscendingSequenceLength(int[] data, int start, int compare, int max) {
+		if (start >= data.length) {
+			// once reach end of data array then return max
 			return max;
-		} else {
-			for (int i = start; i < data.length-1; i++) {
-				if (data[i] < data[i+1]) {
-					// not ascending anymore so move onto checking from the next item in array
-					return longestAscendingSequenceLength(data, max, i+1);
-				} else {
-					// that pair of items was ascending so increment max by one
-					max++;
-				}
+		}
+		if (compare >= data.length || data[compare] < data[compare - 1]) {
+			// the sequence is no longer ascending so move onto the next possibility
+			int potentialMax = compare - start; // the length of the ascending sequence we just found
+			if (potentialMax > max) {
+				return longestAscendingSequenceLength(data, compare, compare+1, compare-start);
+			} else {
+				return longestAscendingSequenceLength(data, compare, compare+1, max);
 			}
-			// if it reaches here then the ascending sequence goes to the end of the array
-			return max;
+		} else {
+			// the sequence is (so far) ascending so continue checking if its longer
+			return longestAscendingSequenceLength(data, start, compare + 1, max);
 		}
 	}
 
