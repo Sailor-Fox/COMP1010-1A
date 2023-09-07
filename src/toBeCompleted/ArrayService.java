@@ -323,7 +323,5 @@ public class ArrayService {
 	 */
 	public static int[] longestAscendingSequence(int[] data) {
 		return new int[0];
-		// testing
-		// testing times two
 	}
 }
