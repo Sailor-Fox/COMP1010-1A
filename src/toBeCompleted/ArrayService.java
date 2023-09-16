@@ -127,9 +127,9 @@ public class ArrayService {
 					min = data[i];
 				}
 			}
-		}
 
-		return min; // reached after iterating through the whole array
+			return min; // reached after iterating through the whole array
+		}
 	}
 
 	/**
@@ -247,29 +247,52 @@ public class ArrayService {
 	 * return empty array if array is empty
 	 */
 	public static int[] sorted(int[] data) {
-		// a bubble sort algorithim 
-		if (data == null) {
+		/*
+			(A bubble sort algorithim)
+			Compare one pair of adjacent items at a time and if they
+			are in the wrong order, swap them. Then move on to the
+			next pair and repeat this check and possible swap until 
+			the end of the array is reached. Then check if the array 
+			is in the correct order and if not repeat the whole process.
+		*/
+
+		if (data == null) { // check for null array
 			return null;
-		} else if (data.length == 0) {
+		} else if (data.length == 0) { // check for empty array
 			return new int[0];
 		} else {
-			int[] sortArr = new int[data.length]; // this will be the sorted version of the data
+			/*
+				Create a new array that will be sorted and eventually
+				returned. It is intially an instance copy of data 
+				before we sort it.
+			*/
+
+			int[] sortArr = new int[data.length];
+
 			for (int i = 0; i < data.length; i++) {
 				sortArr[i] = data[i];
 			}
-			while (!isAscending(sortArr)) { // one iteration of the while loop is one sweep through the array
-				for (int i = 0; i < data.length - 1; i++) {
-					if (sortArr[i] > sortArr[i+1]) { // if adjacent items not ascending they must be swapped
-						// store their values in a and b
-						int a = sortArr[i]; 
-						int b = sortArr[i+1];
-						// perform the swap
-						sortArr[i+1] = a;
-						sortArr[i] = b;
+
+			while (!isAscending(sortArr)) { // only keep sorting when the array is not already sorted
+				for (int i = 0; i < data.length - 1; i++) { // the first item of the pair to be checked
+					if (sortArr[i] > sortArr[i+1]) {
+						/*
+							When the pair must be swapped we have to store
+							the value of each item of the pair in temporary 
+							variables and then assign them to the correct 
+							positions in the array. 
+						*/
+
+						int higher = sortArr[i]; 
+						int lower = sortArr[i+1];
+
+						sortArr[i+1] = higher;
+						sortArr[i] = lower;
 					}
 				}
 			}
-			return sortArr;
+
+			return sortArr; // we reach this only when the array is in ascending order
 		}	
 	}
 
@@ -291,17 +314,23 @@ public class ArrayService {
 	 * return 0 if array is null or empty.
 	 */
 	public static int median(int[] data) {
-		if (data == null || data.length == 0) {
+		if (data == null || data.length == 0) { // null and empty array check
 			return 0;
 		} else {
-			int[] sortedArr = sorted(data);
-			int len = sortedArr.length; // storing the array length as magic number
-			if (len%2  == 0) { // when the array has an even number of items
+			int[] sortedArr = sorted(data); // obtain the sorted array
+			int len = sortedArr.length;
+
+			/*
+				The item of the sorted array that must be
+				returned depends on whether there is an 
+				even or odd number of items in the array.
+			*/
+
+			if (len%2  == 0) {
 				return sortedArr[len/2-1];
-			} else { // when the array has an odd number of items
+			} else {
 				return sortedArr[len/2];	
 			}
-			
 		}
 	}
 
@@ -314,22 +343,41 @@ public class ArrayService {
 	 * return 0 if the array is null or empty
 	 */
 	public static int mostCommonItem(int[] data) {
-		if (data == null || data.length == 0) {
+		if (data == null || data.length == 0) { // null and empty array check
 			return 0;
 		} else {
-			int len = data.length; // storing data's length as a magic number
-			int[] countArr = new int[len]; // will be an array holding number of occurences of each integer in data
+			int len = data.length;
+
+			/* 
+				Create an array and populate it such that item i 
+				of that array holds the number of times that item 
+				i of the data array occurs in the data array.
+			*/
+
+			int[] countArr = new int[len];
+
 			for (int i = 0; i < len; i++) {
-				countArr[i] = countOccurrences(data, data[i]);
+				countArr[i] = countOccurrences(data, data[i]); 
 			}
-			int maxCount = max(countArr); // the highest number of times the same integer is in data
+
+			/*
+				Find and store the number of times the most common
+				item occurs.
+				Then iterate through countArr to find the index of 
+				the first item to occur that many times.
+				Then return the corresponding item from the data array.
+			*/
+
+			int maxCount = max(countArr);
+
 			for (int j = 0; j < len; j++) {
 				if (maxCount == countArr[j]) {
 					return data[j];
 				}
 			}
 		}
-		return 0; // this line will never be reached unless there is a logic error (only here to satisfy syntax)
+
+		return 0; // mathematically this line will never be reached
 	}
 	
 	/**
@@ -339,35 +387,59 @@ public class ArrayService {
 	 * return 0 if array is null or empty.
 	 */
 	public static int longestAscendingSequenceLength(int[] data) {
-		if (data == null || data.length == 0) {
+		if (data == null || data.length == 0) { // null and empty array check
 			return 0;
 		} else {
-			// call the recursive function
-			return longestAscendingSequenceLength(data, 0, 1, 0);
+			return longestAscendingSequenceLength(data, 0, 1, 0); // initial call to the recursive function
 		}
 	}
-	/* 
-	 * data: the input array
-	 * start: the beginning of sequence we are checking if ascending
-	 * compare: the current item to check if larger than the prior
-	 * max: the largest ascending sequence length so far
-	*/ 
+
 	public static int longestAscendingSequenceLength(int[] data, int start, int compare, int max) {
+		/* 
+			data: the input array
+			start: the beginning of sequence we are checking if ascending
+			compare: the current item to check if larger than the prior
+			max: the largest ascending sequence length found so far
+		*/
+
 		if (start >= data.length) {
-			// once reach end of data array then return max
-			return max;
+			/* 
+				We have checked everywhere for ascending 
+				sequences so return the longest length found.
+			*/
+
+			return max; 
 		}
-		if (compare >= data.length || data[compare] < data[compare - 1]) {
-			// the sequence is no longer ascending so move onto the next possibility
-			int potentialMax = compare - start; // the length of the ascending sequence we just found
+
+		if (compare >= data.length || data[compare] < data[compare-1]) {
+			/*
+				The sequence is no longer ascending because either:
+				- the current ascending sequence goes until the end of the array
+				- the current pair being checked is not ascending
+				So now call the recursive function again with the appropiate
+				parameters passed.
+				The next sequence to check begins just after where this
+				sequence ended so update start and compare accordingly.
+				If this sequence is the longest found thus far update the 
+				longest length.
+			*/
+
+			int potentialMax = compare-start; // the length of the ascending sequence that just ended
+
 			if (potentialMax > max) {
-				return longestAscendingSequenceLength(data, compare, compare+1, compare-start);
+				return longestAscendingSequenceLength(data, compare, compare+1, potentialMax);
 			} else {
 				return longestAscendingSequenceLength(data, compare, compare+1, max);
 			}
 		} else {
-			// the sequence is (so far) ascending so continue checking if its longer
-			return longestAscendingSequenceLength(data, start, compare + 1, max);
+			/*
+				The sequence is still ascending so recursively call the function
+				to continue checking if this sequence is ascending.
+				Don't change start because we continue checking the same sequence.
+				Move on to the next pair, so increment compare.
+			*/ 
+
+			return longestAscendingSequenceLength(data, start, compare+1, max);
 		}
 	}
 
@@ -379,36 +451,60 @@ public class ArrayService {
 	 * return -1 if array is null or empty.
 	 */
 	public static int longestAscendingSequenceStart(int[] data) {
-		if (data == null || data.length == 0) {
+		if (data == null || data.length == 0) { // null and empty array check
 			return -1;
 		} else {
-			// call the recursive function
-			return longestAscendingSequenceStart(data, 0, 1, 0, 0);
+			return longestAscendingSequenceStart(data, 0, 1, 0, 0); // initial call to the recursive function
 		}
 	}
-	/* 
-	 * data: the input array
-	 * start: the beginning of sequence we are checking if ascending
-	 * compare: the current item to check if larger than the prior
-	 * max: the largest ascending sequence length so far
-	 * maxId: where the longest ascending sequence begins
-	*/ 
+	
 	public static int longestAscendingSequenceStart(int[] data, int start, int compare, int max, int maxId) {
+		/* 
+			data: the input array
+			start: the beginning of sequence we are checking if ascending
+			compare: the current item to check if larger than the prior
+			max: the largest ascending sequence length so far
+			maxId: where the longest ascending sequence begins
+		*/ 
+
 		if (start >= data.length) {
-			// once reach end of data array then return where the longest ascending sequence begins
+			/* 
+				We have checked everywhere for ascending 
+				sequences so return where the longest was 
+				found.
+			*/
+
 			return maxId;
 		}
-		if (compare >= data.length || data[compare] < data[compare - 1]) {
-			// the sequence is no longer ascending so move onto the next possibility
-			int potentialMax = compare - start; // the length of the ascending sequence we just found
+		if (compare >= data.length || data[compare] < data[compare-1]) {
+			/*
+				The sequence is no longer ascending because either:
+				- the current ascending sequence goes until the end of the array
+				- the current pair being checked is not ascending
+				So now call the recursive function again with the appropiate
+				parameters passed.
+				The next sequence to check begins just after where this
+				sequence ended so update start and compare accordingly.
+				If this sequence is the longest found thus far update the 
+				longest length and where it starts.
+			*/
+
+			int potentialMax = compare-start; // the length of the ascending sequence that just ended
+
 			if (potentialMax > max) {
-				return longestAscendingSequenceStart(data, compare, compare+1, compare-start, start);
+				return longestAscendingSequenceStart(data, compare, compare+1, potentialMax, start);
 			} else {
 				return longestAscendingSequenceStart(data, compare, compare+1, max, maxId);
 			}
 		} else {
-			// the sequence is (so far) ascending so continue checking if its longer
-			return longestAscendingSequenceStart(data, start, compare + 1, max, maxId);
+			/*
+				The sequence is still ascending so recursively call the function
+				to continue checking if this sequence is ascending.
+				Don't change start because we continue checking the same sequence.
+				Move on to the next pair, so increment compare.
+			*/ 
+
+			return longestAscendingSequenceStart(data, start, compare+1, max, maxId);
 		}
 	}
 	
@@ -421,22 +517,35 @@ public class ArrayService {
 	 * return empty array if array is empty
 	 */
 	public static int[] longestAscendingSequence(int[] data) {
-		if (data == null) {
+		if (data == null) { // null array check
 			return null; 
-		} else if (data.length == 0) {
+		} else if (data.length == 0) { // empty array check
 			return new int[0];
 		} else {
+			/*
+				Use the previous functions to find the length 
+				and beginning of the longest ascending sequence. 
+			*/
+
 			int length = longestAscendingSequenceLength(data);
 			int start = longestAscendingSequenceStart(data);
-			int[] arr = new int[length];
+			int[] ascendingArray = new int[length]; // this will be the ascending sequence
+
+			/*
+				Iterate from the start'th item of the original data to 
+				the end of the asecnding sequence (using its known length).
+			*/
+
+			for (int i = 0; i < length; i++) { //
+				ascendingArray[i] = data[i+start];
+			}
+
 			for (int i = 0; i < length; i++) {
-				arr[i] = data[i + start];
+				System.out.println(ascendingArray[i]);
 			}
-			for (int i = 0; i < arr.length; i++) {
-				System.out.println(arr[i]);
-			}
+
 			System.out.println("end of array");
-			return arr;
+			return ascendingArray;
 		}
 	}
 }
