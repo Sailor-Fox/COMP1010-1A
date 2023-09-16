@@ -140,7 +140,7 @@ public class ArrayService {
 	 * return 0 if array is null or empty.
 	 */
 	public static int diff(int[] data) {
-		return max(data) - min(data); // using the previously defined max() and min() functions
+		return max(data)-min(data); // using the previously defined max() and min() functions
 	}
 	
 	/**
@@ -232,7 +232,7 @@ public class ArrayService {
 				sum += data[i];
 			}
 
-			double average = sum / data.length; // compute the average
+			double average = sum/data.length; // compute the average
 			return average;  
 		}
 	}
@@ -274,7 +274,7 @@ public class ArrayService {
 			}
 
 			while (!isAscending(sortArr)) { // only keep sorting when the array is not already sorted
-				for (int i = 0; i < data.length - 1; i++) { // the first item of the pair to be checked
+				for (int i = 0; i < data.length-1; i++) { // the first item of the pair to be checked
 					if (sortArr[i] > sortArr[i+1]) {
 						/*
 							When the pair must be swapped we have to store
