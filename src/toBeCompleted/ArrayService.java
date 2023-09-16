@@ -10,8 +10,13 @@ public class ArrayService {
 	 * 
 	 * return -1 if array is null or empty.
 	 */
-	// completed
 	public static int indexOf(int[] data, int target) {
+		/*
+			Our approach iterates through each item of the array
+			and checks if it is the target in which case it returns 
+			the current index. 
+		*/
+
 		if (data == null || data.length == 0) {
 			return -1; 
 		} else {
@@ -21,7 +26,8 @@ public class ArrayService {
 				}
 			}
 		}
-		return -1;
+
+		return -1; // only reached if no matches with target are found
 	}
 	
 	/**
@@ -32,18 +38,27 @@ public class ArrayService {
 	 * 
 	 * return 0 if array is null or empty.
 	 */
-	// completed
 	public static int countOccurrences(int[] data, int target) {
-		if (data == null || data.length == 0) {
+		/*
+			Our approach iterates through each item of the array
+			and checks if it is the target in which case it increases
+			the count variable by one.
+			Once the end of the array is reached it returns the count
+			variable.
+		*/
+
+		if (data == null || data.length == 0) { // checking null and empty array cases
 			return 0; 
 		} else {
 			int count = 0;
+
 			for (int i = 0; i < data.length; i++) {
 				if (data[i] == target) {
 					count++;
 				}
 			}
-			return count;
+
+			return count; // reached after iterating through the whole array
 		}
 	}
 	
@@ -53,18 +68,32 @@ public class ArrayService {
 	 * @return the highest item in the array.
 	 * return 0 if array is null or empty.
 	 */
-	// completed
 	public static int max(int[] data) {
-		if (data == null || data.length == 0) {
+		if (data == null || data.length == 0) { // checking null and empty array cases
 			return 0; 
 		} else {
+			/*  
+				intialising max as the 0th item in the array ensures 
+				it is a value from the array that is returned and not 
+				some placeholder value.
+			*/
+
 			int max = data[0];
+
+			/*
+				Iterates through each item of the array
+				and checks if the item is larger than the largest item
+				currently found. If so it sets the max variable to that
+				item's value. 
+			*/
+
 			for (int i = 0; i < data.length; i++) {
 				if (data[i] > max) {
 					max = data[i];
 				}
 			}
-			return max;
+
+			return max; // reached after iterating through the whole array
 		}
 	}
 	
@@ -74,20 +103,33 @@ public class ArrayService {
 	 * @return the smallest item in the array.
 	 * return 0 if array is null or empty.
 	 */
-	// completed
 	public static int min(int[] data) {
-		int min = 0;
-		if (data == null || data.length == 0) {
+		if (data == null || data.length == 0) { // checking null and empty array cases
 			return 0;
 		} else {
-			min = data[0];
+			/*  
+				intialising min as the 0th item in the array ensures 
+				it is a value from the array that is returned and not 
+				some placeholder value.
+			*/
+
+			int min = data[0];
+			
+			/*
+				Iterates through each item of the array
+				and checks if the item is smaller than the smallest item
+				currently found. If so it sets the min variable to that
+				item's value. 
+			*/	
+
 			for (int i = 0; i < data.length; i++) {
 				if (data[i] < min) {
 					min = data[i];
 				}
 			}
 		}
-		return min;
+
+		return min; // reached after iterating through the whole array
 	}
 
 	/**
@@ -97,9 +139,8 @@ public class ArrayService {
 	 * item of the array.
 	 * return 0 if array is null or empty.
 	 */
-	// completed
 	public static int diff(int[] data) {
-		return max(data) - min(data);
+		return max(data) - min(data); // using the previously defined max() and min() functions
 	}
 	
 	/**
@@ -112,19 +153,27 @@ public class ArrayService {
 	 * return false if array is null
 	 * return true if array is empty or has a single item (vacuous truth)
 	 */
-	// completed 
 	public static boolean isAscending(int[] data) {
-		if (data == null) {
+		if (data == null) { // checking for null array
 			return false;
-		} else if (data.length <= 1) {
+		} else if (data.length <= 1) { // checking for vacuous truths
 			return true;
 		} else {
+			/*
+				Iterate through each item of the array, up until the
+				second last item, and checks if it is larger than the 
+				next item in which case we return false straight away
+				(because that means this pair, and thus the whole 
+				array, is not in ascending order).
+			*/
+
 			for (int i = 0; i < data.length-1; i++) {
 				if (data[i] > data[i+1]) {
 					return false;
 				}
 			}
-			return true;
+
+			return true; // only reaches here if no descending pairs were found
 		}
 	}
 
@@ -138,19 +187,27 @@ public class ArrayService {
 	 * return false if array is null
 	 * return true if array is empty or has a single item (vacuous truth)
 	 */
-	// completed
 	public static boolean isDescending(int[] data) {
-		if (data == null) {
+		if (data == null) { // checking for null array
 			return false;
-		} else if (data.length <= 1) {
+		} else if (data.length <= 1) { // checking for vacuous truths
 			return true;
 		} else {
+			/*
+				Iterate through each item of the array, up until the
+				second last item, and checks if it is smaller than the 
+				next item in which case we return false straight away
+				(because that means this pair, and thus the whole 
+				array, is not in descending order).
+			*/
+
 			for (int i = 0; i < data.length-1; i++) {
 				if (data[i] < data[i+1]) {
 					return false;
 				}
 			}
-			return true;
+
+			return true; // only reaches here if no ascending pairs were found
 		}
 	}
 
@@ -160,16 +217,23 @@ public class ArrayService {
 	 * @return the average of the array.
 	 * return 0 if array is null or empty.
 	 */
-	// completed
 	public static double average(int[] data) {
-		if (data == null || data.length == 0) {
+		if (data == null || data.length == 0) { // checking null and empty arrays
 			return 0;
 		} else {
-			double sum = 0;
+			double sum = 0; // double is used the later division returns a double
+
+			/*
+				Iterate through the array to and add each item's 
+				value to sum to obtain the sum of the array.
+			*/
+
 			for (int i = 0; i < data.length; i++) {
 				sum += data[i];
 			}
-			return sum / data.length;
+
+			double average = sum / data.length; // compute the average
+			return average;  
 		}
 	}
 	
@@ -182,7 +246,6 @@ public class ArrayService {
 	 * return null array if array is null
 	 * return empty array if array is empty
 	 */
-	// completed
 	public static int[] sorted(int[] data) {
 		// a bubble sort algorithim 
 		if (data == null) {
